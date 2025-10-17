@@ -10,7 +10,7 @@ const ModelComparison = () => {
       recall: '97%',
     },
     {
-      name: 'Gradient Boosting',
+      name: 'Gradient Boosting**',
       label: 'Model 2',
       accuracy: '98.28%',
       macroAverage: '56%',
@@ -92,7 +92,10 @@ const ModelComparison = () => {
           {/* Footnote */}
           <div className="mt-4 px-4 sm:px-6">
             <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-500">
-              *Might be biased
+              * Might be biased
+            </p>
+            <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-500">
+              ** Model used for the analysis
             </p>
           </div>
         </div>
