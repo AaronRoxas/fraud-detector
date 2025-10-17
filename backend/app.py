@@ -14,68 +14,21 @@ logging.basicConfig(level=logging.INFO)
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 model_path = os.path.join(BASE_DIR, "gradient_boost_model.pkl")
 
-# Debug: List files in the directory
-try:
-    files_in_dir = os.listdir(BASE_DIR)
-    logging.info(f"Files in BASE_DIR ({BASE_DIR}): {files_in_dir}")
-    logging.info(f"Model file exists: {os.path.exists(model_path)}")
-    if os.path.exists(model_path):
-        file_size = os.path.getsize(model_path)
-        logging.info(f"Model file size: {file_size} bytes ({file_size / (1024*1024):.2f} MB)")
-except Exception as e:
-    logging.error(f"Error checking directory: {e}")
-
 try:
     logging.info(f"Attempting to load model from: {model_path}")
     model = joblib.load(model_path)
     logging.info("Fraud detection model loaded successfully")
 except Exception as e:
     logging.error(f"Error loading model: {e}")
-    logging.error(f"Current working directory: {os.getcwd()}")
-    logging.error(f"__file__ location: {__file__}")
     model = None
 
 @app.route('/')
 def index():
-    model_status = 'loaded' if model is not None else 'not loaded'
-    return jsonify({
-        'status': 'Flask API is running',
-        'message': 'Use /predict endpoint for fraud detection',
-        'model_status': model_status,
-        'model_path': model_path,
-        'base_dir': BASE_DIR
-    })
-
-@app.route('/health', methods=['GET'])
-def health():
-    """Health check endpoint to verify model is loaded"""
-    try:
-        files_in_dir = os.listdir(BASE_DIR)
-        return jsonify({
-            'status': 'healthy' if model is not None else 'unhealthy',
-            'model_loaded': model is not None,
-            'model_path': model_path,
-            'model_exists': os.path.exists(model_path),
-            'base_dir': BASE_DIR,
-            'files_in_directory': files_in_dir
-        })
-    except Exception as e:
-        return jsonify({
-            'status': 'error',
-            'error': str(e)
-        }), 500
+    return jsonify({'status': 'Flask API is running', 'message': 'Use /predict endpoint for fraud detection'})
 
 @app.route('/predict', methods=['POST'])
 def predict():
     try:
-        # Check if model is loaded
-        if model is None:
-            logging.error("Model is not loaded. Cannot make predictions.")
-            return jsonify({
-                'error': 'Model not loaded. Please check server logs.',
-                'details': 'The ML model file may be missing from the deployment.'
-            }), 503
-
         data = request.get_json()
         logging.info(f"Received data: {data}")
 

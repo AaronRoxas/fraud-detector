@@ -29,7 +29,7 @@ const Hero = () => {
             </button>
           </div>
 
-          <div className="relative flex items-center justify-center md:hidden ">
+          <div className="relative flex items-center justify-center md:hidden lg:block ">
             {/* Light mode illustration */}
             <img 
               src="/imgs/illustation.svg" 
